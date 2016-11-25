@@ -85,8 +85,8 @@
             rgbColor = this.hex(d);
         vm.add(cd.detect(rgbColor));
       }).mousemove(function(d,e){
-        var offsetX = e.pageX + 20 + 'px',
-            offsetY = e.pageY - 20 + 'px',
+       var offsetX = e.offsetX - window.scrollX + 30 + 'px',
+            offsetY = e.offsetY - window.scrollY - 20 + 'px',
             el = document.querySelector('#tipbox');
         if(!el){
           el = document.createElement('div');
