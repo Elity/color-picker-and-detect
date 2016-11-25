@@ -1,7 +1,9 @@
 # colorPicker
 A javascript lib for rgb color picker and detect to human color
 
+### Live Demo
 
+https://jsfiddle.net/xingsuifeng/yajsdg65/
 
 ### Usage
 
