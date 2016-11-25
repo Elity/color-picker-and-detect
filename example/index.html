@@ -65,7 +65,7 @@
           if(this.colors.indexOf(color) != -1)
             this.del(color);
           if(this.colors.length == 5)
-            this.shift();
+            this.colors.shift();
           this.colors.push(color)
         },
         del: function(color){
@@ -104,7 +104,7 @@
         setTimeout(_=>document.querySelector('#tipbox').style.display = 'none',500)
       });
     });
-    img.src = 'https://dl.dropboxusercontent.com/u/139992952/multple/marioStanding.png';
+    img.src = 'http://lobbydata.com/Content/images/Lobbying_Firm_Report_Detail3.jpg';
   </script>
 </body>
 </html>
