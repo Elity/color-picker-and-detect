@@ -1,3 +1,5 @@
+// Source PHP Code:https://github.com/Elity/colorDetect
+
 var ColorDetect = (function () {
 	function _(colorConfig) {
 		this.colorConfig = colorConfig || {}
