@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Color Picker</title>
+  <script src="//cdn.bootcss.com/vue/2.0.7/vue.min.js"></script>
+  <script src='../src/colorPicker.js'></script>
+  <script src='colorDetect.js'></script>
+  <style>
+    #colors,.img-ul{
+      list-style:none;
+    }
+    #colors li{
+      float:left;
+      padding:10px;
+      position:relative;
+      border:1px solid #ccc;
+      margin-right:5px;
+    }
+    #colors li:hover .del{
+      display:block;
+    }
+    .color-name{
+      font-size:20px;
+    }
+    .del{
+      position:absolute;
+      text-decoration:none;
+      right:0;
+      top:0;
+      color: #aa0000;
+      display:none
+    }
+    #color-str{
+      clear:both;
+    }
+    .img-ul{
+      overflow: hidden;
+      display:block;
+    }
+    .img-ul li{
+      float:left;
+      margin-right:10px;
+    }
+    .img-ul li a{
+      text-decoration:none
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <ul class='img-ul'>
+      <li v-for="img in imgs" @click='change(img)'><a href="javascript:;" v-text="img"></a></li>
+    </ul>
+    <img src="1.jpg" alt="" id='test'>
+    <div id="color-str" v-text="'Result:' + colors.join(',')" ></div>
+    <ul id="colors">
+      <li v-for="color in colors"><em class='color-name' v-text="color">loading</em><a @click="del(color)" class='del' href="javascript:;">x</a></li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        imgs : ['1.jpg','2.jpg'],
+        colors : []
+      },
+      methods:{
+        add: function(color){
+          if(this.colors.indexOf(color) != -1)
+            this.del(color);
+          if(this.colors.length == 5)
+            this.shift();
+          this.colors.push(color)
+        },
+        del: function(color){
+          this.colors.splice(this.colors.indexOf(color),1)
+        },
+        change: function(img){
+          this.colors = [];
+          document.querySelector('#test').style.display = 'inline';
+          document.querySelector('#test').src = img
+        }
+      }
+    })
+    var cd = ColorDetect({"191970":"深蓝","666666":"象牙黑","808069":"暖灰","990033":"黑红","000000":"黑色","FFFFFF":"白色","F0FFFF":"天蓝灰","808A87":"冷灰","CCCCCC":"灰色","FAFFF0":"象牙灰","E6E6E6":"石板灰","FAF0E6":"亚麻灰","F5F5F5":"白烟灰","FFFFCD":"杏仁灰","FCE6C9":"蛋壳灰","FFF5EE":"贝壳灰","FF0000":"红色","FFFF00":"黄色","E3170D":"镉红","FF9912":"镉黄","9C661F":"砖红","E3CF57":"香蕉黄","FF7F50":"珊瑚红","FFD700":"金黄","FF6347":"番茄红","FF7D40":"肉黄","FFC0CB":"粉红","FFE384":"粉黄","B0171F":"印度红","FF8000":"橘黄","FF00FF":"深红","ED9121":"萝卜黄","8B864E":"黑黄","00FF00":"绿色","802A2A":"棕色","00FFFF":"青色","C76114":"肖贡土色","7FFF00":"黄绿色","F4A460":"沙棕色","40E0D0":"青绿色","D2B48C":"棕褐色","082E54":"靛青色","BC8F8F":"玫瑰红","228B22":"森林绿","A0522D":"赫色","6B8E23":"草绿色","0000FF":"蓝色","A020F0":"肖贡土色","03A89E":"锰蓝","DA70D6":"淡紫色","8A2BE2":"紫罗兰","00C78C":"土耳其蓝","9933FA":"胡紫色"});
+    document.querySelector('#test').addEventListener('load',function(){
+      ColorPicker(this).click(function(d,e){
+        var nameBox = document.querySelector('#color-name'),
+            rgbColor = this.hex(d);
+        vm.add(cd.detect(rgbColor));
+      }).mousemove(function(d,e){
+        var offsetX = e.pageX + 20 + 'px',
+            offsetY = e.pageY - 20 + 'px',
+            el = document.querySelector('#tipbox');
+        if(!el){
+          el = document.createElement('div');
+          el.id = 'tipbox';
+          el.style = 'position:fixed';
+          el.innerHTML = "<span class='color-box' style='display:inline-block;width:50px;height:50px;border:2px solid #999'></span>";
+          document.body.insertAdjacentElement('beforeend',el)
+        }
+        el.style.display = 'block';
+        el.style.left = offsetX;
+        el.style.top = offsetY;
+        colorStr = 'rgba(' + d.join(',') + ')'
+        el.querySelector('.color-box').style.backgroundColor = colorStr;
+      }).mouseout(function(){
+        setTimeout(_=>document.querySelector('#tipbox').style.display = 'none',500)
+      });
+    });
+  </script>
+</body>
+</html>
